@@ -18,7 +18,8 @@ var UserSchema = new Schema({
     name: String,
     username: { type: String, required: true, index: { unique: true }},
     password: { type: String, required: true, select: false },
-    /*continent: {type: String, required: true}*/
+   // continent: {type: String, required: true},
+   // balance: {type: Number, required: true}
 });
 
 UserSchema.pre('save', function(next) {

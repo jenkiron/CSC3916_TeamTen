@@ -50,6 +50,7 @@ router.route('/postjwt')
     );
 
 router.post('/signup', function(req, res) {
+    let usercontinent = null;
     let Request = require("request");
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
@@ -58,12 +59,16 @@ router.post('/signup', function(req, res) {
             if(!err){
                 console.log(body)
             }
+            usercontinent = body.continent;
         });
-
         var user = new User();
         user.name = req.body.name;
         user.username = req.body.username;
         user.password = req.body.password;
+        user.continent = usercontinent;
+        user.balance = 100; //start each user with $100
+
+
 
 
         user.save(function(err){
@@ -268,6 +273,37 @@ router.route('/review')
                     }
                 })
             }
+    })
+
+router.route('/transactions')
+    .get( authJwtController.isAuthenticated, function (req, res) {
+        let userInfo = {};
+        User.aggregate([
+            {
+                $lookup:
+                    {
+                        from: 'transactions',
+                        localField: 'username',
+                        foreignField: 'transUsers[0]',
+                        as: 'user_sent_transactions'
+                    }
+            }
+        ]).then( entries =>
+            entries.filter(item => item.username === userToken.username).forEach(entry => userInfo.add(entry))); //create userToken with signin method to save user details
+
+        User.aggregate([
+            {
+                $lookup:
+                    {
+                        from: 'transactions',
+                        localField: 'username',
+                        foreignField: 'transUsers[1]',
+                        as: 'user_recv_transactions'
+                    }
+            }
+        ]).then( entries =>
+            entries.filter(item => item.username === userToken.username).forEach(entry => userInfo.add(entry))); //create userToken with signin method to save user details
+        res.json(userInfo);
     })
 
 
