@@ -9,7 +9,7 @@ var Movie = require('./Country');
 var Review = require('./review');
 var User = require('./Users');
 var theUser; //this is used to store the user object. Then we can use it again later to assign attributes where we need.
-var Request = require("request");
+var Request = require('request');
 
 var app = express();
 app.use(cors());
@@ -58,9 +58,9 @@ router.post('/signup', function(req, res) {
     } else {
         Request('http://ip-api.com/json?fields=continent', function (err, response, body){
             if(!err){
-                console.log(body)
+                console.log(body);
+                usercontinent = body.continent;
             }
-            usercontinent = body.continent;
         });
         var user = new User();
         user.name = req.body.name;
