@@ -50,16 +50,18 @@ router.route('/postjwt')
     );
 
 router.post('/signup', function(req, res) {
-    let usercontinent;
+    let usercontinent = null;
     var Request = require('request');
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
     } else {
-        Request('http://ip-api.com/json?fields=continent', function (err, response, object){
+        Request('http://ip-api.com/json?fields=continent', function (err, response, body){
             if(err){
                 response.json(err);
             }
-            objectForUser = JSON.parse(object);
+            console.log(body);
+            usercontinent = JSON.parse(body);
+            console.log(usercontinent.continent);
 
         })
 
@@ -67,7 +69,7 @@ router.post('/signup', function(req, res) {
         user.name = req.body.name;
         user.username = req.body.username;
         user.password = req.body.password;
-        user.continent = objectForUser.continent;
+        user.continent = usercontinent;
         user.balance = 100; //start each user with $100
 
         console.log(user.continent);
