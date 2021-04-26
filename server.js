@@ -9,7 +9,6 @@ var Movie = require('./Country');
 var Review = require('./review');
 var User = require('./Users');
 var theUser; //this is used to store the user object. Then we can use it again later to assign attributes where we need.
-var Request = require('request');
 
 var app = express();
 app.use(cors());
@@ -51,26 +50,27 @@ router.route('/postjwt')
     );
 
 router.post('/signup', function(req, res) {
-    let usercontinent = null;
-
+    let usercontinent;
+    var Request = require('request');
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
     } else {
-        Request('http://ip-api.com/json?fields=continent', function (err, response, body){
-            if(!err){
-                console.log(body);
-                usercontinent = body.continent;
+        Request('http://ip-api.com/json?fields=continent', function (err, response, object){
+            if(err){
+                response.json(err);
             }
-        });
+            objectForUser = JSON.parse(object);
+
+        })
+
         var user = new User();
         user.name = req.body.name;
         user.username = req.body.username;
         user.password = req.body.password;
-        user.continent = usercontinent;
+        user.continent = objectForUser.continent;
         user.balance = 100; //start each user with $100
 
-
-
+        console.log(user.continent);
 
         user.save(function(err){
             if (err) {
