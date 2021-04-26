@@ -9,6 +9,7 @@ var Movie = require('./Country');
 var Review = require('./review');
 var User = require('./Users');
 var theUser; //this is used to store the user object. Then we can use it again later to assign attributes where we need.
+var Request = require("request");
 
 var app = express();
 app.use(cors());
@@ -51,7 +52,7 @@ router.route('/postjwt')
 
 router.post('/signup', function(req, res) {
     let usercontinent = null;
-    let Request = require("request");
+
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
     } else {
