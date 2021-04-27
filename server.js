@@ -50,7 +50,7 @@ router.route('/postjwt')
     );
 
 router.post('/signup', function(req, res) {
-    var usercontinent = new User();
+    var usercontinent;
 
     var Request = require('request');
     if (!req.body.username || !req.body.password) {
@@ -62,27 +62,24 @@ router.post('/signup', function(req, res) {
             }
             console.log(body);
             usercontinent = JSON.parse(body);
-            usercontinent = usercontinent.continent
-            console.log(usercontinent); //for testing
-        });
-        console.log(usercontinent); //for testing
+            var user = new User();
+            user.name = req.body.name;
+            user.username = req.body.username;
+            user.password = req.body.password;
+            user.continent = usercontinent.continent;
+            user.balance = 100; //start each user with $100
 
-        var user = new User();
-        user.name = req.body.name;
-        user.username = req.body.username;
-        user.password = req.body.password;
-        user.continent = usercontinent;
-        user.balance = 100; //start each user with $100
-
-        user.save(function(err){
-            if (err) {
-                if (err.code == 11000)
-                    return res.json({ success: false, message: 'A user with that username already exists.'});
-                else
-                    return res.json(err);
-            }
-            res.json({success: true, msg: 'Successfully created new user.'})
+            user.save(function(err){
+                if (err) {
+                    if (err.code == 11000)
+                        return res.json({ success: false, message: 'A user with that username already exists.'});
+                    else
+                        return res.json(err);
+                }
+                res.json({success: true, msg: 'Successfully created new user.'})
+            });
         });
+
     }
 });
 
