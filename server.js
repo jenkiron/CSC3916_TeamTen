@@ -50,7 +50,8 @@ router.route('/postjwt')
     );
 
 router.post('/signup', function(req, res) {
-    var usercontinent;
+    var usercontinent = new User;
+
     var Request = require('request');
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
@@ -62,13 +63,13 @@ router.post('/signup', function(req, res) {
             console.log(body);
             usercontinent = JSON.parse(body);
             console.log(usercontinent.continent); //for testing
-        })
+        });
 
         var user = new User();
         user.name = req.body.name;
         user.username = req.body.username;
         user.password = req.body.password;
-        user.continent = usercontinent;
+        user.continent = usercontinent.continent;
         user.balance = 100; //start each user with $100
 
         user.save(function(err){
