@@ -50,7 +50,7 @@ router.route('/postjwt')
     );
 
 router.post('/signup', function(req, res) {
-    let usercontinent = null;
+    var usercontinent;
     var Request = require('request');
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
