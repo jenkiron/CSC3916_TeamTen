@@ -61,8 +61,7 @@ router.post('/signup', function(req, res) {
             }
             console.log(body);
             usercontinent = JSON.parse(body);
-            console.log(usercontinent.continent);
-
+            console.log(usercontinent.continent); //for testing
         })
 
         var user = new User();
@@ -72,8 +71,6 @@ router.post('/signup', function(req, res) {
         user.continent = usercontinent;
         user.balance = 100; //start each user with $100
 
-        console.log(user.continent);
-
         user.save(function(err){
             if (err) {
                 if (err.code == 11000)
@@ -81,7 +78,6 @@ router.post('/signup', function(req, res) {
                 else
                     return res.json(err);
             }
-
             res.json({success: true, msg: 'Successfully created new user.'})
         });
     }
