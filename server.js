@@ -107,6 +107,7 @@ router.post('/signin', function (req, res) {
     })
 });
 
+//Testing do we need movie routes?
 router.route('/movies')
     //POST
     .post(authJwtController.isAuthenticated, function (req, res) {
